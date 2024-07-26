@@ -55,3 +55,33 @@ export const detail = async (req: Request, res: Response) => {
     topic: topic,
   });
 };
+
+// [PATCH] /songs/:typeLike/:songId
+export const like = async (req: Request, res: Response) => {
+  const idSong: string = req.params.songId;
+  const typeLike = req.params.typeLike;
+
+  const song = await Song.findOne({
+    _id: idSong,
+    deleted: false,
+    status: "active",
+  });
+
+  const updateLike: number = typeLike == "like" ? song.like + 1 : song.like - 1;
+  await Song.updateOne(
+    {
+      _id: req.params.songId,
+      deleted: false,
+      status: "active",
+    },
+    {
+      like: updateLike,
+    }
+  );
+
+  res.json({
+    code: 200,
+    message: "Đã like",
+    like: updateLike,
+  });
+};

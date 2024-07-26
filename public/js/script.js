@@ -7,9 +7,6 @@ if (aplayer) {
   let dataSinger = aplayer.getAttribute("data-singer");
   dataSinger = JSON.parse(dataSinger);
 
-  console.log(dataSong);
-  console.log(dataSinger);
-
   const ap = new APlayer({
     container: aplayer,
     audio: [
@@ -35,3 +32,26 @@ if (aplayer) {
   });
 }
 // End APlayer
+
+// Button Like
+const buttonLike = document.querySelector("[button-like]");
+if (buttonLike) {
+  buttonLike.addEventListener("click", () => {
+    const idSong = buttonLike.getAttribute("button-like");
+    const isActive = buttonLike.classList.contains("active");
+    const typeLike = isActive ? "dislike" : "like";
+    const link = `/songs/like/${typeLike}/${idSong}`;
+
+    const option = {
+      method: "PATCH",
+    };
+    fetch(link, option)
+      .then((res) => res.json())
+      .then((data) => {
+        const span = buttonLike.querySelector(".inner-number");
+        span.innerHTML = `${data.like}`;
+        buttonLike.classList.toggle("active");
+      });
+  });
+}
+// END Button Like
