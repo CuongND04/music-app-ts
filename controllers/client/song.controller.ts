@@ -10,7 +10,6 @@ export const list = async (req: Request, res: Response) => {
     deleted: false,
     status: "active",
   }).select("title");
-
   const songs = await Song.find({
     topicId: topic.id,
     deleted: false,
@@ -101,7 +100,10 @@ export const favorite = async (req: Request, res: Response) => {
         songId: idSong,
       });
       if (!existFavoriteSong) {
-        const record = new FavoriteSong({ songId: idSong });
+        const record = new FavoriteSong({
+          songId: idSong,
+          userId: "",
+        });
         await record.save();
       }
       break;
