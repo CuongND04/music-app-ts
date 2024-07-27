@@ -1,5 +1,5 @@
 tinymce.init({
-  selector: "textarea.textarea-mce",
+  selector: "textarea.textarea-mce", // cho thuộc tính mce vào class mới ăn
   plugins: "image",
   image_title: true,
   automatic_uploads: true,
