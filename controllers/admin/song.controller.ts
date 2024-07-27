@@ -32,3 +32,10 @@ export const create = async (req: Request, res: Response) => {
     singers: singers,
   });
 };
+
+// [POST] /admin/songs/create
+export const createPost = async (req: Request, res: Response) => {
+  console.log(req.body);
+
+  res.send("OK");
+};

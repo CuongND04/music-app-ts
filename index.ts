@@ -7,9 +7,13 @@ import adminRoutes from "./routes/admin/index.route";
 
 import { systemConfig } from "./config/config";
 import path from "path";
+import bodyParser from "body-parser";
 
 const app: Express = express();
 const port: string | number = process.env.PORT || 3000;
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false })); // để đọc được json từ form
 
 dotenv.config();
 database.connect();
