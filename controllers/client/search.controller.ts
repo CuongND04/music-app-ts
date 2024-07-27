@@ -3,9 +3,10 @@ import Song from "../../models/song.model";
 import Singer from "../../models/singer.model";
 import { convertToSlug } from "../../helpers/convertToSlug";
 
-// [GET] /search/result
+// [GET] /search/:type
 export const result = async (req: Request, res: Response) => {
   try {
+    const type = req.params.type;
     // lấy keyword sau dấu ? trên url
     const keyword: string = `${req.query.keyword}`;
     // tạo một cái title không phân biệt chữ hoa, thường
@@ -19,6 +20,7 @@ export const result = async (req: Request, res: Response) => {
       $or: [{ title: keywordRegex }, { slug: stringSlugRegex }],
     }).select("avatar title singerId like slug");
     // lọc qua danh sách kết quả
+    let newSongs = [];
     for (const item of songs) {
       // tìm ca sĩ hát bài đó
       const singer = await Singer.findOne({
@@ -27,13 +29,36 @@ export const result = async (req: Request, res: Response) => {
       }).select("fullName");
       // tạo thông tin của ca sĩ trong bài hát
       item["singer"] = singer;
+      newSongs.push({
+        id: item.id,
+        title: item.title,
+        avatar: item.avatar,
+        like: item.like,
+        slug: item.slug,
+        singer: {
+          fullName: singer.fullName,
+        },
+      });
     }
 
-    res.render("client/pages/search/result", {
-      pageTitle: `Kết quả: ${keyword}`,
-      keyword: keyword,
-      songs: songs,
-    });
+    switch (type) {
+      case "result":
+        res.render("client/pages/search/result", {
+          pageTitle: `Kết quả: ${keyword}`,
+          keyword: keyword,
+          songs: newSongs,
+        });
+        break;
+      case "suggest":
+        res.json({
+          code: 200,
+          message: "Thành công",
+          songs: newSongs,
+        });
+        break;
+      default:
+        break;
+    }
   } catch (error) {
     console.log(error);
   }
