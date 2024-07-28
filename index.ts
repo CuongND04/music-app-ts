@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false })); // để đọc được js
 dotenv.config();
 database.connect();
 
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 // TinyMCE
 
@@ -31,7 +31,7 @@ app.use(
 // tạo biến toàn cục
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 clientRoutes(app);
 adminRoutes(app);
