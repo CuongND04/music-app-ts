@@ -1,7 +1,7 @@
 import express, { Express } from "express";
 import * as database from "./config/database";
 import dotenv from "dotenv";
-
+import methodOverride from "method-override";
 import clientRoutes from "./routes/client/index.route";
 import adminRoutes from "./routes/admin/index.route";
 
@@ -12,6 +12,7 @@ import bodyParser from "body-parser";
 const app: Express = express();
 const port: string | number = process.env.PORT || 3000;
 
+app.use(methodOverride("_method"));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false })); // để đọc được json từ form
 
